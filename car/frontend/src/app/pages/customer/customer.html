@@ -1,0 +1,265 @@
+<div class="customer-container">
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+  <div class="container-fluid py-4">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h2 class="page-title">
+          <i class="fa fa-users"></i> Customer Management
+        </h2>
+      </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+      <div class="col-xl-3 col-md-6">
+        <div class="stats-card">
+          <div class="stats-icon customers-icon">
+            <i class="fa fa-users"></i>
+          </div>
+          <div class="stats-content">
+            <h3>{{ customerList.length }}</h3>
+            <p>Total Customers</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-md-6">
+        <div class="stats-card">
+          <div class="stats-icon bookings-icon">
+            <i class="fa fa-calendar"></i>
+          </div>
+          <div class="stats-content">
+            <h3>{{ bookingList.length }}</h3>
+            <p>Total Bookings</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-md-6">
+        <div class="stats-card">
+          <div class="stats-icon revenue-icon">
+            <i class="fa fa-money"></i>
+          </div>
+          <div class="stats-content">
+            <h3>₹{{ getTotalRevenue() | number }}</h3>
+            <p>Total Revenue</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-md-6">
+        <div class="stats-card">
+          <div class="stats-icon avg-icon">
+            <i class="fa fa-calculator"></i>
+          </div>
+          <div class="stats-content">
+            <h3>₹{{ getAverageSpent() | number }}</h3>
+            <p>Avg per Customer</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row g-4 mb-4">
+      <!-- Top Customers Chart -->
+      <div class="col-xl-6 col-lg-6">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h5><i class="fa fa-trophy"></i> Top 5 Customers by Spending</h5>
+          </div>
+          <div class="chart-body">
+            <canvas #topCustomersCanvas></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customers by City Chart -->
+      <div class="col-xl-6 col-lg-6">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h5><i class="fa fa-map-marker"></i> Customer Distribution by City</h5>
+          </div>
+          <div class="chart-body">
+            <canvas #cityChartCanvas></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Spending Trend Chart -->
+      <div class="col-xl-6 col-lg-6">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h5><i class="fa fa-line-chart"></i> Customer Spending Trend</h5>
+          </div>
+          <div class="chart-body">
+            <canvas #spendingTrendCanvas></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bookings per Customer Chart -->
+      <div class="col-xl-6 col-lg-6">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h5><i class="fa fa-bar-chart"></i> Top 10 Customers by Bookings</h5>
+          </div>
+          <div class="chart-body">
+            <canvas #bookingsPerCustomerCanvas></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="customers-card">
+          <div class="card-header">
+            <h4><i class="fa fa-list"></i> Customer List</h4>
+            <div>
+              <button class="btn btn-light me-2" (click)="loadBookingData(); loadCustomerData()">
+                <i class="fa fa-refresh"></i> Refresh
+              </button>
+              <button class="btn btn-light" (click)="onNewCustomer()">
+                <i class="fa fa-plus"></i> Add Customer
+              </button>
+            </div>
+          </div>
+          
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Customer Details</th>
+                    <th>Contact Info</th>
+                    <th>Bookings</th>
+                    <th>Total Spent</th>
+                    <th>Last Booking</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (customer of customerList; track customer.customerId; let i = $index) {
+                    <tr>
+                      <td>{{ i + 1 }}</td>
+                      <td>
+                        <div class="customer-details">
+                          <strong>{{ customer.customerName }}</strong>
+                          <small class="d-block text-muted">
+                            <i class="fa fa-map-marker"></i> {{ customer.customerCity }}
+                          </small>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="contact-info">
+                          <div><i class="fa fa-phone"></i> {{ customer.mobileNo }}</div>
+                          <div><i class="fa fa-envelope"></i> {{ customer.email }}</div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="booking-badge">{{ getCustomerBookings(customer.customerId).length }}</span>
+                      </td>
+                      <td>
+                        <span class="amount-badge">₹{{ getCustomerTotalSpent(customer.customerId) | number }}</span>
+                      </td>
+                      <td>{{ getCustomerLastBooking(customer.customerId) ? (getCustomerLastBooking(customer.customerId) | date:'short') : 'No bookings' }}</td>
+                      <td>
+                        <button class="btn btn-sm btn-primary me-1" (click)="onEditCustomer(customer)">
+                          <i class="fa fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-sm btn-danger" (click)="onDeleteCustomer(customer.customerId)">
+                          <i class="fa fa-trash"></i> Delete
+                        </button>
+                      </td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="7" class="text-center text-muted py-4">
+                        <i class="fa fa-info-circle"></i> No customers found
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Customer Modal -->
+@if (showModal) {
+  <div class="modal-backdrop" (click)="closeModal()"></div>
+  <div class="modal show" style="display: block;" tabindex="-1">
+    <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fa fa-user-plus"></i> {{ newCustomer.customerId === 0 ? 'Add New Customer' : 'Edit Customer' }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label>Customer Name *</label>
+                <input type="text" [(ngModel)]="newCustomer.customerName" name="customerName" class="form-control" placeholder="Enter customer name">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label>City *</label>
+                <input type="text" [(ngModel)]="newCustomer.customerCity" name="customerCity" class="form-control" placeholder="Enter city">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label>Mobile Number *</label>
+                <input type="text" 
+                       [(ngModel)]="newCustomer.mobileNo" 
+                       name="mobileNo" 
+                       class="form-control"
+                       [class.is-invalid]="mobileError"
+                       placeholder="Enter 10 digit mobile number"
+                       maxlength="10"
+                       (input)="validateMobile()">
+                @if (mobileError) {
+                    <div class="invalid-feedback d-block">
+                        {{ mobileError }}
+                    </div>
+                }
+                <small class="text-muted">Must be exactly 10 digits</small>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label>Email *</label>
+                <input type="email" 
+                       [(ngModel)]="newCustomer.email" 
+                       name="email" 
+                       class="form-control"
+                       [class.is-invalid]="emailError"
+                       placeholder="Enter email (e.g., user@gmail.com)"
+                       (input)="validateEmail()">
+                @if (emailError) {
+                    <div class="invalid-feedback d-block">
+                        {{ emailError }}
+                    </div>
+                }
+                <small class="text-muted">Must end with @gmail.com</small>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">
+            <i class="fa fa-times"></i> Cancel
+          </button>
+          <button type="button" class="btn btn-primary-custom" (click)="onSaveCustomer()">
+            <i class="fa fa-save"></i> {{ newCustomer.customerId === 0 ? 'Save Customer' : 'Update Customer' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

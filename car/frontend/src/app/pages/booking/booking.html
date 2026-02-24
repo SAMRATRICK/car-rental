@@ -1,0 +1,162 @@
+<div class="container mt-5">
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+    <!-- Header with Create Button -->
+    <div class="text-center mb-4">
+        <button class="btn btn-primary-custom btn-lg" (click)="onNewBooking()">
+            <i class="fa fa-plus-circle"></i> Create / Update Booking
+        </button>
+    </div>
+
+    <!-- Bookings Grid -->
+    <div class="row g-3">
+        @if (bookingList.length === 0) {
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fa fa-info-circle"></i> No bookings found. Create your first booking!
+                </div>
+            </div>
+        }
+
+        @for (booking of bookingList; track booking.bookingId) {
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="booking-card" (click)="toggleBookingDetails(booking.bookingId)">
+                    <!-- Compact View -->
+                    <div class="booking-card-header">
+                        <span class="booking-id">#{{ booking.bookingId }}</span>
+                        <span class="booking-date">{{ booking.bookingDate | date:'dd MMM' }}</span>
+                    </div>
+                    <div class="booking-card-body">
+                        <div class="customer-name">
+                            <i class="fa fa-user"></i> {{ booking.customerName }}
+                        </div>
+                    </div>
+
+                    <!-- Expanded View -->
+                    @if (expandedBookingId === booking.bookingId) {
+                        <div class="booking-details" (click)="$event.stopPropagation()">
+                            <div class="detail-row">
+                                <i class="fa fa-map-marker"></i> {{ booking.customerCity }}
+                            </div>
+                            <div class="detail-row">
+                                <i class="fa fa-phone"></i> {{ booking.mobileNo }}
+                            </div>
+                            <div class="detail-row">
+                                <i class="fa fa-envelope"></i> {{ booking.email }}
+                            </div>
+                            <div class="detail-row">
+                                <i class="fa fa-car"></i> {{ getCarDetails(booking.carId) }}
+                            </div>
+                            <div class="detail-row">
+                                <i class="fa fa-calendar"></i> {{ booking.bookingDate | date:'medium' }}
+                            </div>
+                            <div class="detail-row">
+                                <i class="fa fa-money"></i> Amount: ₹{{ booking.totalBillAmount }}
+                            </div>
+                            @if (booking.discount > 0) {
+                                <div class="detail-row">
+                                    <i class="fa fa-tag"></i> Discount: ₹{{ booking.discount }}
+                                </div>
+                            }
+
+                            <div class="action-buttons">
+                                <button class="btn btn-sm btn-primary me-2" (click)="onEditBooking(booking); $event.stopPropagation()">
+                                    <i class="fa fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-sm btn-danger" (click)="onDeleteBooking(booking.bookingId); $event.stopPropagation()">
+                                    <i class="fa fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Booking Modal -->
+@if (showModal) {
+    <div class="modal-backdrop" (click)="closeModal()"></div>
+    <div class="modal show" style="display: block;" tabindex="-1">
+        <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fa fa-ticket"></i> {{ bookingForm.value.bookingId == 0 ? 'Create New Booking' : 'Update Booking' }}
+                    </h5>
+                    <button type="button" class="btn-close" (click)="closeModal()"></button>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="bookingForm">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <h6 class="section-title"><i class="fa fa-user"></i> Customer Info</h6>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Customer Name *</label>
+                                <input type="text" formControlName="customerName" class="form-control" placeholder="Customer Name">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Customer City *</label>
+                                <input type="text" formControlName="customerCity" class="form-control" placeholder="Customer City">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Mobile No *</label>
+                                <input type="text" formControlName="mobileNo" class="form-control" placeholder="Mobile No">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Email *</label>
+                                <input type="email" formControlName="email" class="form-control" placeholder="Email">
+                            </div>
+
+                            <div class="col-12 mb-3 mt-3">
+                                <h6 class="section-title"><i class="fa fa-car"></i> Booking Details</h6>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Select Car *</label>
+                                <select formControlName="carId" class="form-control">
+                                    <option value="">Select Car</option>
+                                    @for (item of carList; track item.carId) {
+                                        <option [value]="item.carId">
+                                            {{ item.regNo }} - {{ item.brand }} {{ item.model }}
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Booking Date *</label>
+                                <input type="datetime-local" formControlName="bookingDate" class="form-control">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Total Bill Amount *</label>
+                                <input type="number" formControlName="totalBillAmount" class="form-control" placeholder="Total Bill Amount">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Discount</label>
+                                <input type="number" formControlName="discount" class="form-control" placeholder="Discount">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">
+                        <i class="fa fa-times"></i> Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary-custom" (click)="onSaveBooking()" [disabled]="isLoading">
+                        <i class="fa fa-save"></i> {{ isLoading ? 'Saving...' : (bookingForm.value.bookingId == 0 ? 'Create Booking' : 'Update Booking') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

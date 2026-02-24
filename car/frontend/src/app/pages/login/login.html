@@ -1,0 +1,44 @@
+<div class="parent">
+    <div class="login-card text-center">
+
+        <div class="car-icon">
+            <i class="fa fa-car"></i>
+        </div>
+
+        <h3>Car Rental App</h3>
+
+        <form>
+
+            <div class="mb-3 input-icon">
+                <i class="fa fa-envelope"></i>
+                 <input [(ngModel)]="loginObj.username" name="username" type="text" class="form-control" placeholder="username">
+            </div>
+
+            <div class="mb-3 input-icon">
+                <i class="fa fa-lock"></i>
+                <input  [(ngModel)]="loginObj.password" name="password" type="password" class="form-control" placeholder="Password">
+            </div>
+
+            <div class="d-grid mt-4">
+                <button  type="button" (click)="onLogin()" class="btn btn-login">
+                    <i class="fa fa-sign-in"></i> Login
+                </button>
+            </div>
+
+            <div class="forgot-password-link">
+                <a (click)="goToForgotPassword()" class="link-text">Forgot Password?</a>
+            </div>
+
+            <div class="register-link">
+                New user? 
+                <a (click)="goToRegister()" class="link-text">Register here</a>
+            </div>
+
+        </form>
+
+        <div class="footer-text">
+            © 2026 Car Rental System | Samrat Chatterjee
+        </div>
+
+    </div>
+</div>

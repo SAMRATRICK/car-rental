@@ -1,0 +1,74 @@
+// Prisma schema for Car Rental Management System
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  username       String   @unique
+  fullName       String?
+  password       String   // Hashed password
+  email          String?  @unique
+  phone          String?
+  profilePicture String?  @default("https://ui-avatars.com/api/?name=User&background=4F46E5&color=fff&size=150")
+  role           String   @default("admin")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Car {
+  id        Int       @id @default(autoincrement()) @map("carId")
+  brand     String
+  model     String
+  year      Int
+  color     String
+  dailyRate Decimal   @db.Decimal(10, 2)
+  carImage  String
+  regNo     String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  bookings  Booking[]
+
+  @@map("cars")
+}
+
+model Customer {
+  id           Int       @id @default(autoincrement()) @map("customerId")
+  customerName String
+  customerCity String
+  mobileNo     String
+  email        String    @unique
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  bookings     Booking[]
+
+  @@map("customers")
+}
+
+model Booking {
+  id              Int      @id @default(autoincrement()) @map("bookingId")
+  customerId      Int
+  carId           Int
+  customerName    String   // Denormalized for easier queries
+  customerCity    String   // Denormalized for easier queries
+  mobileNo        String   // Denormalized for easier queries
+  email           String   // Denormalized for easier queries
+  bookingDate     DateTime
+  discount        Decimal  @default(0) @db.Decimal(10, 2)
+  totalBillAmount Decimal  @db.Decimal(10, 2)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  car      Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  @@map("bookings")
+}

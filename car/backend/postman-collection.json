@@ -1,0 +1,373 @@
+{
+  "info": {
+    "name": "Car Rental Management API",
+    "description": "Complete API collection for Car Rental Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.token) {",
+                  "        pm.collectionVariables.set('token', jsonData.data.token);",
+                  "        console.log('Token saved:', jsonData.data.token);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"samrat\",\n  \"password\": \"88889999\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/GetDashboardData",
+              "host": ["{{baseUrl}}"],
+              "path": ["GetDashboardData"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vehicles",
+      "item": [
+        {
+          "name": "Get All Cars",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/GetCars",
+              "host": ["{{baseUrl}}"],
+              "path": ["GetCars"]
+            }
+          }
+        },
+        {
+          "name": "Get Cars with Pagination",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/GetCars?page=1&pageSize=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["GetCars"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create New Car",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"brand\": \"Tesla\",\n  \"model\": \"Model 3\",\n  \"year\": 2024,\n  \"color\": \"White\",\n  \"dailyRate\": 6000,\n  \"carImage\": \"https://images.unsplash.com/photo-1560958089-b8a1929cea89\",\n  \"regNo\": \"MH-06-XY-1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/CreateNewCar",
+              "host": ["{{baseUrl}}"],
+              "path": ["CreateNewCar"]
+            }
+          }
+        },
+        {
+          "name": "Update Car",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"carId\": 1,\n  \"brand\": \"Toyota\",\n  \"model\": \"Camry\",\n  \"year\": 2024,\n  \"color\": \"Silver\",\n  \"dailyRate\": 2800,\n  \"carImage\": \"https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb\",\n  \"regNo\": \"MH-01-AB-1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/UpdateCar",
+              "host": ["{{baseUrl}}"],
+              "path": ["UpdateCar"]
+            }
+          }
+        },
+        {
+          "name": "Delete Car",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/DeleteCarbyCarId/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["DeleteCarbyCarId", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "Get All Customers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/GetCustomers",
+              "host": ["{{baseUrl}}"],
+              "path": ["GetCustomers"]
+            }
+          }
+        },
+        {
+          "name": "Create New Customer",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Alice Johnson\",\n  \"customerCity\": \"Pune\",\n  \"mobileNo\": \"+91-9876543213\",\n  \"email\": \"alice.johnson@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/CreateNewCustomer",
+              "host": ["{{baseUrl}}"],
+              "path": ["CreateNewCustomer"]
+            }
+          }
+        },
+        {
+          "name": "Update Customer",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"customerName\": \"John Doe Updated\",\n  \"customerCity\": \"Mumbai\",\n  \"mobileNo\": \"+91-9876543210\",\n  \"email\": \"john.doe@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/UpdateCustomer",
+              "host": ["{{baseUrl}}"],
+              "path": ["UpdateCustomer"]
+            }
+          }
+        },
+        {
+          "name": "Delete Customer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/DeletCustomerById/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["DeletCustomerById", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Get All Bookings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/geAllBookings",
+              "host": ["{{baseUrl}}"],
+              "path": ["geAllBookings"]
+            }
+          }
+        },
+        {
+          "name": "Get Booking By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/GetBookingByBookingId/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["GetBookingByBookingId", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Bookings By Customer ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/geAllBookingsByCustomerId/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["geAllBookingsByCustomerId", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create New Booking",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"John Doe\",\n  \"customerCity\": \"Mumbai\",\n  \"mobileNo\": \"+91-9876543210\",\n  \"email\": \"john.doe@example.com\",\n  \"carId\": 1,\n  \"bookingDate\": \"2024-02-20T10:00:00Z\",\n  \"discount\": 100,\n  \"totalBillAmount\": 7400\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/CreateNewBooking",
+              "host": ["{{baseUrl}}"],
+              "path": ["CreateNewBooking"]
+            }
+          }
+        },
+        {
+          "name": "Update Booking",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookingId\": 1,\n  \"customerName\": \"John Doe\",\n  \"customerCity\": \"Mumbai\",\n  \"mobileNo\": \"+91-9876543210\",\n  \"email\": \"john.doe@example.com\",\n  \"carId\": 1,\n  \"bookingDate\": \"2024-02-20T10:00:00Z\",\n  \"discount\": 200,\n  \"totalBillAmount\": 7300\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/UpdateBooking",
+              "host": ["{{baseUrl}}"],
+              "path": ["UpdateBooking"]
+            }
+          }
+        },
+        {
+          "name": "Delete Booking",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/DeletBookingById/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["DeletBookingById", "1"]
+            }
+          }
+        },
+        {
+          "name": "Filter Bookings",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"startDate\": \"2024-01-01\",\n  \"endDate\": \"2024-12-31\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/FilterBookings",
+              "host": ["{{baseUrl}}"],
+              "path": ["FilterBookings"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

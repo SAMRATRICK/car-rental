@@ -1,0 +1,188 @@
+.btn-primary-custom {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.booking-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.booking-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.booking-card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}
+
+.booking-id {
+  font-size: 1.1rem;
+}
+
+.booking-date {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.booking-card-body {
+  padding: 15px;
+}
+
+.customer-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.customer-name i {
+  color: #667eea;
+  margin-right: 8px;
+}
+
+.booking-details {
+  padding: 15px;
+  border-top: 2px solid #f0f0f0;
+  background: #f8f9fa;
+}
+
+.detail-row {
+  padding: 8px 0;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.detail-row i {
+  color: #667eea;
+  margin-right: 8px;
+  width: 20px;
+}
+
+.action-buttons {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.section-title {
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #ecf0f1;
+}
+
+.section-title i {
+  color: #667eea;
+  margin-right: 8px;
+}
+
+.form-control {
+  border: 2px solid #ecf0f1;
+  border-radius: 8px;
+  padding: 10px 15px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1055;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+}
+
+.modal.show {
+  display: block !important;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 1.75rem auto;
+  pointer-events: none;
+}
+
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+  outline: 0;
+}
+
+/* Toast Styles */
+#toastContainer {
+  z-index: 9999;
+}
+
+.toast {
+  min-width: 300px;
+  margin-bottom: 1rem;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.toast:not(.show) {
+  opacity: 0;
+}
+
+.toast-body {
+  padding: 0.75rem;
+}
+
+.toast-body i {
+  margin-right: 8px;
+}
+
+@media (max-width: 768px) {
+  .booking-card {
+    margin-bottom: 15px;
+  }
+}

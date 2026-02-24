@@ -1,0 +1,216 @@
+<nav class="navbar navbar-expand-lg dashboard-navbar px-4">
+    <a class="navbar-brand" routerLink="/admin/dashboard">
+        <i class="fa fa-car"></i> CarRental
+    </a>
+
+    <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+        (click)="toggleIcon()">
+        @if (isMenuOpen()) {
+        <i class="fa fa-times"></i>
+        } @else {
+        <i class="fa fa-bars"></i>
+        }
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/admin/dashboard" routerLinkActive="active">
+                    <i class="fa fa-dashboard"></i> Dashboard
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/admin/vehicles" routerLinkActive="active">
+                    <i class="fa fa-car"></i> Cars
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/admin/booking" routerLinkActive="active">
+                    <i class="fa fa-calendar"></i> Bookings
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/admin/customers" routerLinkActive="active">
+                    <i class="fa fa-users"></i> Customers
+                </a>
+            </li>
+        </ul>
+
+        <div class="d-flex align-items-center">
+            <div class="me-3 text-white">
+                <i class="fa fa-bell"></i>
+            </div>
+
+            <div class="admin-profile d-flex align-items-center me-3" (click)="openProfileModal()"
+                style="cursor: pointer;">
+                <!-- <img [src]=` http://localhost:3000/${userProfile.profilePicture}` alt="User Profile"/> -->
+
+                <!-- <img [src]="'http://localhost:3000/' + userProfile.profilePicture" alt="User Profile" /> -->
+
+                <img [src]="userProfile.profilePicture || 'assets/default-user.png'" alt="User Profile" />
+                {{ userProfile.fullName || userProfile.username || 'User' }}
+            </div>
+
+            <button class="logout-btn" (click)="onLogout()">
+                <i class="fa fa-sign-out"></i> Logout
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Profile Modal -->
+@if (showProfileModal()) {
+<div class="modal-overlay" (click)="closeProfileModal()">
+    <div class="profile-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h4><i class="fa fa-user-circle"></i> Edit Profile</h4>
+            <button class="close-btn" (click)="closeProfileModal()">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <!-- Profile Picture Section -->
+            <div class="profile-pic-section">
+                <div class="profile-pic-container">
+                    <!-- <img [src]="previewUrl || profileForm.profilePicture" alt="Profile" class="profile-pic-large"> -->
+
+                    <img [src]="previewUrl || profileForm.profilePicture || 'assets/default-user.png'"
+                        class="profile-pic-large" />
+
+                    <label for="fileInput" class="upload-overlay">
+                        <i class="fa fa-camera"></i>
+                        <span>Change Photo</span>
+                    </label>
+                    <input type="file" id="fileInput" accept="image/*" (change)="onFileSelected($event)"
+                        style="display: none;">
+                </div>
+                <p class="text-muted small mt-2">Click on the image to upload a new photo</p>
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group">
+                <label><i class="fa fa-envelope"></i> Email</label>
+                <div class="d-flex gap-2">
+                    <input type="email" class="form-control" [(ngModel)]="profileForm.email"
+                        placeholder="Enter your email" disabled>
+                    <button type="button" class="btn btn-outline-primary" (click)="openEmailChangeModal()"
+                        style="white-space: nowrap;">
+                        <i class="fa fa-edit"></i> Change
+                    </button>
+                </div>
+                <small class="text-muted">Click "Change" to update your email with OTP verification</small>
+            </div>
+
+            <!-- Phone Field -->
+            <div class="form-group">
+                <label><i class="fa fa-phone"></i> Phone Number</label>
+                <input type="tel" class="form-control" [(ngModel)]="profileForm.phone"
+                    placeholder="Enter your phone number" pattern="[0-9+\-\s()]*"
+                    title="Phone number can only contain numbers and formatting characters (+, -, spaces, parentheses)">
+                <small class="text-muted">Numbers only (e.g., +1234567890)</small>
+            </div>
+
+            <!-- Username (Read-only) -->
+            <div class="form-group">
+                <label><i class="fa fa-user"></i> Username</label>
+                <input type="text" class="form-control" [value]="userProfile.username" disabled>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="closeProfileModal()">
+                Cancel
+            </button>
+            <button class="btn btn-primary" (click)="updateProfile()">
+                <i class="fa fa-save"></i> Update Profile
+            </button>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Email Change Modal -->
+@if (showEmailChangeModal()) {
+<div class="modal-overlay" (click)="closeEmailChangeModal()">
+    <div class="profile-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h4><i class="fa fa-envelope"></i> Change Email Address</h4>
+            <button class="close-btn" (click)="closeEmailChangeModal()">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <!-- Step 1: Request OTP -->
+            @if (emailChangeStep() === 'request') {
+            <div class="alert alert-info">
+                <i class="fa fa-info-circle"></i> We'll send an OTP to your current email address to verify it's you.
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa fa-envelope"></i> Current Email</label>
+                <input type="email" class="form-control" [(ngModel)]="emailChangeForm.currentEmail"
+                    placeholder="Enter your current email" disabled>
+            </div>
+            }
+
+            <!-- Step 2: Verify OTP -->
+            @if (emailChangeStep() === 'verify') {
+            <div class="alert alert-success">
+                <i class="fa fa-check-circle"></i> OTP sent to {{ emailChangeForm.currentEmail }}
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa fa-key"></i> Enter OTP</label>
+                <input type="text" class="form-control" [(ngModel)]="emailChangeForm.otp"
+                    placeholder="Enter 6-digit OTP" maxlength="6" pattern="[0-9]*">
+                <small class="text-muted">Check your email for the OTP code</small>
+            </div>
+            }
+
+            <!-- Step 3: Enter New Email -->
+            @if (emailChangeStep() === 'change') {
+            <div class="alert alert-success">
+                <i class="fa fa-check-circle"></i> OTP verified! Now enter your new email address.
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa fa-envelope"></i> New Email Address</label>
+                <input type="email" class="form-control" [(ngModel)]="emailChangeForm.newEmail"
+                    placeholder="Enter your new email address">
+            </div>
+            }
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="closeEmailChangeModal()">
+                Cancel
+            </button>
+
+            @if (emailChangeStep() === 'request') {
+            <button class="btn btn-primary" (click)="requestEmailChangeOtp()">
+                <i class="fa fa-paper-plane"></i> Send OTP
+            </button>
+            }
+
+            @if (emailChangeStep() === 'verify') {
+            <button class="btn btn-primary" (click)="verifyEmailChangeOtp()">
+                <i class="fa fa-check"></i> Verify OTP
+            </button>
+            }
+
+            @if (emailChangeStep() === 'change') {
+            <button class="btn btn-primary" (click)="submitEmailChange()">
+                <i class="fa fa-save"></i> Change Email
+            </button>
+            }
+        </div>
+    </div>
+</div>
+}
+
+<router-outlet></router-outlet>

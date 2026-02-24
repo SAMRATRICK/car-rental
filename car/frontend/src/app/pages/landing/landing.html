@@ -1,0 +1,179 @@
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <i class="bi bi-car-front-fill"></i> CarRental
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" (click)="scrollToSection('home')">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="scrollToSection('features')">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="scrollToSection('cars')">Cars</a>
+        </li>
+        @if (!isLoggedIn()) {
+          <li class="nav-item">
+            <button class="btn btn-outline-light ms-2" (click)="goToLogin()">Login</button>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-primary ms-2" (click)="goToRegister()">Sign Up</button>
+          </li>
+        } @else {
+          <li class="nav-item">
+            <button class="btn btn-success ms-2" (click)="goToDashboard()">Dashboard</button>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-outline-light ms-2" (click)="logout()">Logout</button>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="home" class="hero-section">
+  <div class="hero-overlay"></div>
+  <div class="container hero-content">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="hero-title animate-fade-in">
+          Your Journey Starts Here
+        </h1>
+        <p class="hero-subtitle animate-fade-in-delay">
+          Rent premium cars at affordable prices. Experience luxury, comfort, and reliability with every ride.
+        </p>
+        <div class="hero-buttons animate-fade-in-delay-2">
+          <button class="btn btn-primary btn-lg me-3" (click)="goToLogin()">
+            <i class="bi bi-car-front"></i> Book Now
+          </button>
+          <button class="btn btn-outline-light btn-lg" (click)="scrollToSection('cars')">
+            <i class="bi bi-search"></i> Browse Cars
+          </button>
+        </div>
+        <div class="hero-stats animate-fade-in-delay-3">
+          <div class="stat-item">
+            <h3>500+</h3>
+            <p>Happy Customers</p>
+          </div>
+          <div class="stat-item">
+            <h3>50+</h3>
+            <p>Premium Cars</p>
+          </div>
+          <div class="stat-item">
+            <h3>24/7</h3>
+            <p>Support</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-image animate-slide-in">
+          <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600" alt="Luxury Car" class="img-fluid">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <i class="bi bi-chevron-down"></i>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="features-section">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2 class="section-title">Why Choose Us</h2>
+      <p class="section-subtitle">Experience the best car rental service with unmatched benefits</p>
+    </div>
+    <div class="row g-4">
+      @for (feature of features; track feature.title) {
+        <div class="col-lg-3 col-md-6">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi {{feature.icon}}"></i>
+            </div>
+            <h4>{{feature.title}}</h4>
+            <p>{{feature.description}}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Cars Section -->
+<section id="cars" class="cars-section">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2 class="section-title">Our Fleet</h2>
+      <p class="section-subtitle">Explore our premium collection of vehicles</p>
+    </div>
+    <div class="row g-4">
+      @for (car of cars; track car.name) {
+        <div class="col-lg-4 col-md-6">
+          <div class="car-card">
+            <div class="car-image">
+              <img [src]="car.image" [alt]="car.name">
+              <div class="car-badge">{{car.type}}</div>
+            </div>
+            <div class="car-details">
+              <h4>{{car.name}}</h4>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="container text-center">
+    <h2 class="cta-title">Ready to Hit the Road?</h2>
+    <p class="cta-subtitle">Join thousands of satisfied customers and book your perfect ride today</p>
+    <button class="btn btn-light btn-lg" (click)="goToLogin()">
+      <i class="bi bi-arrow-right-circle"></i> Get Started Now
+    </button>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        <h5><i class="bi bi-car-front-fill"></i> CarRental</h5>
+        <p>Your trusted partner for premium car rentals. Experience luxury and comfort on every journey.</p>
+      </div>
+      <div class="col-lg-4">
+        <h5>Quick Links</h5>
+        <ul class="footer-links">
+          <li><a (click)="scrollToSection('home')">Home</a></li>
+          <li><a (click)="scrollToSection('features')">Features</a></li>
+          <li><a (click)="scrollToSection('cars')">Cars</a></li>
+          <li><a (click)="goToLogin()">Login</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4">
+        <h5>Follow Us</h5>
+        <div class="social-links">
+          <a href="#"><i class="bi bi-facebook"></i></a>
+          <a href="#"><i class="bi bi-twitter"></i></a>
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-linkedin"></i></a>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="text-center">
+      <p class="mb-0">© 2026 Car Rental System | Samrat Chatterjee. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

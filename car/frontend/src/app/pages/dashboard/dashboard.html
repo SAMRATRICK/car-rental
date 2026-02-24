@@ -1,0 +1,175 @@
+<div class="dashboard-container">
+  <div class="container-fluid py-4">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h2 class="dashboard-title">
+          <i class="fa fa-dashboard"></i> Dashboard Overview
+        </h2>
+      </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+      <div class="col-xl-3 col-md-6">
+        <div class="stats-card cars-card">
+          <div class="stats-icon">
+            <i class="fa fa-car"></i>
+          </div>
+          <div class="stats-content">
+            <h3>{{ dashboardStats.totalCars }}</h3>
+            <p>Total Cars</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-md-6">
+        <div class="stats-card bookings-card">
+          <div class="stats-icon">
+            <i class="fa fa-calendar"></i>
+          </div>
+          <div class="stats-content">
+            <h3>{{ dashboardStats.totalBookings }}</h3>
+            <p>Total Bookings</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-md-6">
+        <div class="stats-card customers-card">
+          <div class="stats-icon">
+            <i class="fa fa-users"></i>
+          </div>
+          <div class="stats-content">
+            <h3>{{ dashboardStats.totalCustomers }}</h3>
+            <p>Total Customers</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-md-6">
+        <div class="stats-card revenue-card">
+          <div class="stats-icon">
+            <i class="fa fa-money"></i>
+          </div>
+          <div class="stats-content">
+            <h3>₹{{ dashboardStats.totalRevenue | number }}</h3>
+            <p>Total Revenue</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row g-4 mb-5">
+      <!-- Revenue Trend Chart -->
+      <div class="col-xl-6 col-lg-6">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h5><i class="fa fa-line-chart"></i> Revenue Trend (Last 7 Days)</h5>
+          </div>
+          <div class="chart-body">
+            <canvas #revenueTrendCanvas></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bookings by Brand Chart -->
+      <div class="col-xl-6 col-lg-6">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h5><i class="fa fa-pie-chart"></i> Bookings by Car Brand</h5>
+          </div>
+          <div class="chart-body">
+            <canvas #brandChartCanvas></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue vs Bookings Chart -->
+      <div class="col-xl-6 col-lg-6">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h5><i class="fa fa-bar-chart"></i> Revenue vs Bookings (Last 6 Months)</h5>
+          </div>
+          <div class="chart-body">
+            <canvas #revenueVsBookingsCanvas></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Growth Chart -->
+      <div class="col-xl-6 col-lg-6">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h5><i class="fa fa-area-chart"></i> Customer Growth</h5>
+          </div>
+          <div class="chart-body">
+            <canvas #customerGrowthCanvas></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="recent-bookings-card">
+          <div class="card-header">
+            <h4><i class="fa fa-list"></i> Recent Bookings</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Customer</th>
+                    <th>Car</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (booking of recentBookings; track booking.bookingId; let i = $index) {
+                    <tr>
+                      <td>{{ i + 1 }}</td>
+                      <td>
+                        <div class="customer-info">
+                          <strong>{{ booking.customerName }}</strong>
+                          <small class="d-block text-muted">{{ booking.email }}</small>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="car-info">
+                          <img [src]="booking.car?.carImage || 'https://via.placeholder.com/60x40?text=No+Image'" 
+                               [alt]="booking.car?.brand + ' ' + booking.car?.model"
+                               class="car-thumbnail">
+                          <div class="car-details">
+                            <strong>{{ booking.car?.brand }} {{ booking.car?.model }}</strong>
+                            <small class="d-block text-muted">{{ booking.car?.year }} - {{ booking.car?.color }}</small>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{{ booking.bookingDate | date:'short' }}</td>
+                      <td>
+                        <span class="amount-badge">₹{{ booking.totalBillAmount | number }}</span>
+                      </td>
+                      <td>
+                        <span class="status-badge status-active">Active</span>
+                      </td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="6" class="text-center text-muted py-4">
+                        <i class="fa fa-info-circle"></i> No recent bookings found
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

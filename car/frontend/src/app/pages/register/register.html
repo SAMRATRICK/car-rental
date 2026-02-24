@@ -1,0 +1,56 @@
+<div class="parent">
+    <div class="register-card text-center">
+
+        <div class="car-icon">
+            <i class="fa fa-user-plus"></i>
+        </div>
+
+        <h3>Create Account</h3>
+        <p class="subtitle">Join our Car Rental System</p>
+
+        <form>
+
+            <div class="mb-3 input-icon">
+                <i class="fa fa-user"></i>
+                <input [(ngModel)]="registerObj.fullName" name="fullName" type="text" class="form-control" placeholder="Full Name">
+            </div>
+
+            <div class="mb-3 input-icon">
+                <i class="fa fa-user-circle"></i>
+                <input [(ngModel)]="registerObj.username" name="username" type="text" class="form-control" placeholder="Username">
+            </div>
+
+            <div class="mb-3 input-icon">
+                <i class="fa fa-envelope"></i>
+                <input [(ngModel)]="registerObj.email" name="email" type="email" class="form-control" placeholder="Email">
+            </div>
+
+            <div class="mb-3 input-icon">
+                <i class="fa fa-lock"></i>
+                <input [(ngModel)]="registerObj.password" name="password" type="password" class="form-control" placeholder="Password">
+            </div>
+
+            <div class="mb-3 input-icon">
+                <i class="fa fa-lock"></i>
+                <input [(ngModel)]="registerObj.confirmPassword" name="confirmPassword" type="password" class="form-control" placeholder="Confirm Password">
+            </div>
+
+            <div class="d-grid mt-4">
+                <button type="button" (click)="onRegister()" class="btn btn-register">
+                    <i class="fa fa-user-plus"></i> Register
+                </button>
+            </div>
+
+            <div class="login-link">
+                Already have an account? 
+                <a (click)="goToLogin()" class="link-text">Login here</a>
+            </div>
+
+        </form>
+
+        <div class="footer-text">
+            © 2026 Car Rental System | Samrat Chatterjee
+        </div>
+
+    </div>
+</div>

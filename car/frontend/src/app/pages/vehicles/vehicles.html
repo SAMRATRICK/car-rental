@@ -1,0 +1,153 @@
+<div class="container mt-5">
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+    <div class="card vehicle-card">
+        <div class="vehicle-card-header d-flex justify-content-between align-items-center">
+            <h4><i class="fa fa-list"></i> Vehicle List</h4>
+            <button class="btn btn-light" (click)="onNewVehicle()">
+                <i class="fa fa-plus"></i> New Vehicle
+            </button>
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Image</th>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Color</th>
+                        <th>Rate</th>
+                        <th>Reg No</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of carList; track item.carId; let i = $index) {
+                        <tr>
+                            <td>{{ i + 1 }}</td>
+                            <td>
+                                <img [src]="item.carImage || 'https://images.unsplash.com/photo-1503376780353-7e6692767b70'"
+                                     class="car-img-preview"
+                                     (error)="onImageError($event)">
+                            </td>
+                            <td>{{ item.brand }}</td>
+                            <td>{{ item.model }}</td>
+                            <td>{{ item.year }}</td>
+                            <td>{{ item.color }}</td>
+                            <td>₹{{ item.dailyRate }}</td>
+                            <td>{{ item.regNo }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary-custom me-2" (click)="onEdit(item)">
+                                    <i class="fa fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-sm btn-danger-custom" (click)="onDelCarById(item.carId)">
+                                    <i class="fa fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    } @empty {
+                        <tr>
+                            <td colspan="9" class="text-center text-muted py-4">
+                                <i class="fa fa-info-circle"></i> No vehicles found
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Vehicle Modal -->
+@if (showModal) {
+    <div class="modal-backdrop" (click)="closeModal()"></div>
+    <div class="modal show" style="display: block;" tabindex="-1">
+        <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fa fa-car"></i> {{ newCarObj.carId == 0 ? 'Add New Vehicle' : 'Edit Vehicle' }}
+                    </h5>
+                    <button type="button" class="btn-close" (click)="closeModal()"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>Brand *</label>
+                                <input type="text" [(ngModel)]="newCarObj.brand" name="brand" class="form-control" placeholder="Enter Brand">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Model *</label>
+                                <input type="text" [(ngModel)]="newCarObj.model" name="model" class="form-control" placeholder="Enter Model">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label>Year *</label>
+                                <input type="number" 
+                                       [(ngModel)]="newCarObj.year" 
+                                       name="year" 
+                                       class="form-control" 
+                                       [class.is-invalid]="yearError"
+                                       placeholder="Enter Year (e.g., 2024)"
+                                       (input)="validateYear()">
+                                @if (yearError) {
+                                    <div class="invalid-feedback d-block">
+                                        {{ yearError }}
+                                    </div>
+                                }
+                                <small class="text-muted">Valid range: {{ minYear }} - {{ maxYear }}</small>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label>Color *</label>
+                                <input type="text" [(ngModel)]="newCarObj.color" name="color" class="form-control" placeholder="Enter Color">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label>Daily Rate (₹) *</label>
+                                <input type="number" [(ngModel)]="newCarObj.dailyRate" name="dailyRate" class="form-control" placeholder="Enter Daily Rate">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Registration No *</label>
+                                <input type="text" [(ngModel)]="newCarObj.regNo" name="regNo" class="form-control" placeholder="Enter Reg No">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Car Image URL</label>
+                                <input type="text" [(ngModel)]="newCarObj.carImage" name="carImage" class="form-control" placeholder="Paste Image URL">
+                            </div>
+
+                            <div class="col-12 mb-3 text-center">
+                                <label>Image Preview</label><br>
+                                <img [src]="newCarObj.carImage || 'https://images.unsplash.com/photo-1503376780353-7e6692767b70'"
+                                     class="car-img-preview-large mt-2" 
+                                     (error)="onImageError($event)">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">
+                        <i class="fa fa-times"></i> Cancel
+                    </button>
+                    @if (newCarObj.carId == 0) {
+                        <button type="button" (click)="onSaveCar()" class="btn btn-primary-custom">
+                            <i class="fa fa-save"></i> Save Vehicle
+                        </button>
+                    } @else {
+                        <button type="button" (click)="onUpdateCar()" class="btn btn-warning">
+                            <i class="fa fa-save"></i> Update Vehicle
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
