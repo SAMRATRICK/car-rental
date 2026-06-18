@@ -1,36 +1,46 @@
+/* Sleek Admin Booking Grid Styles */
+
 .btn-primary-custom {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  color: white;
-  padding: 12px 30px;
-  border-radius: 8px;
+  background-color: #18181b;
+  border: 1px solid #27272a;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 6px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .btn-primary-custom:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  background-color: #27272a;
+  transform: none;
+  box-shadow: none;
 }
 
 .booking-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   overflow: hidden;
 }
 
 .booking-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.05);
 }
 
 .booking-card-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 12px 15px;
+  background: #fafafa;
+  border-bottom: 1px solid #e4e4e7;
+  color: #09090b;
+  padding: 12px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -38,79 +48,89 @@
 }
 
 .booking-id {
-  font-size: 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #2563eb;
 }
 
 .booking-date {
-  font-size: 0.9rem;
-  opacity: 0.9;
+  font-size: 0.8rem;
+  color: #71717a;
 }
 
 .booking-card-body {
-  padding: 15px;
+  padding: 14px 16px;
 }
 
 .customer-name {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: #09090b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .customer-name i {
-  color: #667eea;
-  margin-right: 8px;
+  color: #71717a;
 }
 
 .booking-details {
-  padding: 15px;
-  border-top: 2px solid #f0f0f0;
-  background: #f8f9fa;
+  padding: 14px 16px;
+  border-top: 1px solid #e4e4e7;
+  background: #fafafa;
 }
 
 .detail-row {
-  padding: 8px 0;
-  color: #555;
-  font-size: 0.9rem;
+  padding: 6px 0;
+  color: #27272a;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .detail-row i {
-  color: #667eea;
-  margin-right: 8px;
-  width: 20px;
+  color: #71717a;
+  width: 16px;
 }
 
 .action-buttons {
-  margin-top: 15px;
+  margin-top: 12px;
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .section-title {
-  color: #2c3e50;
-  font-weight: 600;
-  margin-bottom: 10px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid #ecf0f1;
+  color: #09090b;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e4e4e7;
 }
 
 .section-title i {
-  color: #667eea;
-  margin-right: 8px;
+  color: #2563eb;
+  margin-right: 6px;
 }
 
 .form-control {
-  border: 2px solid #ecf0f1;
-  border-radius: 8px;
-  padding: 10px 15px;
-  transition: all 0.3s ease;
+  border: 1px solid #e4e4e7;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  transition: all 0.15s ease;
 }
 
 .form-control:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  border-color: #a1a1aa;
+  box-shadow: 0 0 0 2px rgba(24, 24, 27, 0.05);
 }
 
-/* Modal Styles */
+/* Modals */
 .modal {
   position: fixed;
   top: 0;
@@ -121,6 +141,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   outline: 0;
+  display: none;
 }
 
 .modal.show {
@@ -134,7 +155,8 @@
   z-index: 1050;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(9, 9, 11, 0.4);
+  backdrop-filter: blur(4px);
 }
 
 .modal-dialog {
@@ -150,11 +172,36 @@
   flex-direction: column;
   width: 100%;
   pointer-events: auto;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0.5rem;
+  background-color: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
   outline: 0;
+}
+
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e4e4e7;
+  background-color: #fafafa;
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #09090b;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-footer {
+  padding: 14px 20px;
+  border-top: 1px solid #e4e4e7;
+  background-color: #fafafa;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 /* Toast Styles */
@@ -163,18 +210,16 @@
 }
 
 .toast {
-  min-width: 300px;
+  min-width: 280px;
   margin-bottom: 1rem;
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-.toast:not(.show) {
-  opacity: 0;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .toast-body {
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .toast-body i {
@@ -183,6 +228,9 @@
 
 @media (max-width: 768px) {
   .booking-card {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
+  }
+  .modal-dialog {
+    margin: 10px;
   }
 }

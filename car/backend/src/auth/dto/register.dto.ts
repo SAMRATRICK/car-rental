@@ -22,4 +22,9 @@ export class RegisterDto {
   @MinLength(6)
   @IsNotEmpty()
   password: string;
+
+  @ApiProperty({ example: 'user', description: 'Role of the account (admin or user)', required: false })
+  @IsString()
+  @IsOptional()
+  role?: string;
 }

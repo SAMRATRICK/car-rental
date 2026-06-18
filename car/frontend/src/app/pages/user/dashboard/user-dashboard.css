@@ -1,0 +1,235 @@
+/* Sleek User Portal Aesthetics */
+
+.user-dashboard-container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.portal-title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #09090b;
+}
+
+.promo-badge-container {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.badge.bg-zinc-900 {
+  background-color: #18181b !important;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid #27272a;
+}
+
+/* Filter Bar Styling */
+.filter-card {
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 12px;
+}
+
+.filter-card .form-control {
+  border: 1px solid #e4e4e7;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  background-color: #fafafa;
+}
+
+.filter-card .form-control:focus {
+  background-color: #ffffff;
+  border-color: #a1a1aa;
+  box-shadow: none;
+}
+
+.uppercase {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+/* Car Rental Cards Grid */
+.car-rental-card {
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.car-rental-card:hover {
+  transform: translateY(-4px);
+  border-color: #a1a1aa;
+  box-shadow: 0 10px 20px -10px rgba(9, 9, 11, 0.1);
+}
+
+.car-card-img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background-color: #f4f4f5;
+}
+
+.car-card-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.car-rental-card:hover .car-card-img-wrapper img {
+  transform: scale(1.03);
+}
+
+.daily-price-badge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background-color: #09090b;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #27272a;
+}
+
+.car-card-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #09090b;
+  margin-bottom: 8px;
+}
+
+.car-meta-details {
+  font-size: 0.85rem;
+  color: #71717a;
+}
+
+.car-meta-details i {
+  margin-right: 4px;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+/* Checkout and Payment Modal */
+.checkout-modal {
+  background: #09090b;
+  border: 1px solid #27272a;
+  border-radius: 12px;
+  width: 95%;
+  max-width: 760px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #fafafa;
+  overflow: hidden;
+}
+
+.checkout-header {
+  border-bottom: 1px solid #27272a;
+}
+
+.checkout-body {
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.checkout-body .form-control,
+.checkout-body select {
+  background: #18181b;
+  border: 1px solid #27272a;
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.checkout-body .form-control:focus,
+.checkout-body select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: #1f1f23;
+  box-shadow: none;
+}
+
+.checkout-body .form-check-input {
+  background-color: #18181b;
+  border: 1px solid #27272a;
+  cursor: pointer;
+}
+
+.checkout-body .form-check-input:checked {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.checkout-body .form-check-label {
+  font-size: 0.85rem;
+  color: #a1a1aa;
+  cursor: pointer;
+}
+
+.custom-specs-title {
+  font-size: 0.95rem;
+  color: #e4e4e7;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Bill breakdown box */
+.bill-breakdown-card {
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+}
+
+.text-zinc-950 {
+  color: #ffffff;
+}
+
+.payment-amount-alert {
+  background-color: #1e1b4b;
+  border: 1px solid #312e81;
+  color: #c7d2fe;
+  border-radius: 8px;
+}
+
+/* Checkmark Success Animation */
+.success-animation-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.success-checkmark-circle {
+  width: 72px;
+  height: 72px;
+  background-color: #059669;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  font-size: 2.2rem;
+  animation: popScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popScale {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.input-group-text {
+  background: #18181b;
+  border: 1px solid #27272a;
+  color: #71717a;
+}

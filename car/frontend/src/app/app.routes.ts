@@ -8,7 +8,10 @@ import { Dashboard } from './pages/dashboard/dashboard';
 import { Vehicles } from './pages/vehicles/vehicles';
 import { Booking } from './pages/booking/booking';
 import { Customer } from './pages/customer/customer';
-import { authGuard, loginGuard } from './guards/auth.guard';
+import { adminGuard, userGuard, loginGuard } from './guards/auth.guard';
+import { UserLayout } from './pages/user/layout/user-layout';
+import { UserDashboard } from './pages/user/dashboard/user-dashboard';
+import { UserBookings } from './pages/user/bookings/user-bookings';
 
 export const routes: Routes = [
     {
@@ -33,7 +36,7 @@ export const routes: Routes = [
     {
         path: 'admin',
         component: Layout,
-        canActivate: [authGuard],
+        canActivate: [adminGuard],
         children: [
             {
                 path: '',
@@ -55,6 +58,26 @@ export const routes: Routes = [
             {
                 path: 'customers',
                 component: Customer
+            }
+        ]
+    },
+    {
+        path: 'user',
+        component: UserLayout,
+        canActivate: [userGuard],
+        children: [
+            {
+                path: '',
+                redirectTo: 'dashboard',
+                pathMatch: 'full'
+            },
+            {
+                path: 'dashboard',
+                component: UserDashboard
+            },
+            {
+                path: 'bookings',
+                component: UserBookings
             }
         ]
     }

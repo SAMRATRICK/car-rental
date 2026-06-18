@@ -24,7 +24,12 @@ export class Login {
     this.authService.login(this.loginObj.username, this.loginObj.password).subscribe({
       next: (response) => {
         if (response.result) {
-          this.router.navigateByUrl('/admin/dashboard');
+          const role = this.authService.getUserRole();
+          if (role === 'user') {
+            this.router.navigateByUrl('/user/dashboard');
+          } else {
+            this.router.navigateByUrl('/admin/dashboard');
+          }
         } else {
           this.toastService.error(response.message || 'Invalid credentials. Please try again.');
         }

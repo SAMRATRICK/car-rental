@@ -134,8 +134,8 @@ export class AuthService {
     );
   }
 
-  register(username: string, fullName: string, email: string, password: string) {
-    return this.http.post<any>(`${this.baseUrl}/register`, { username, fullName, email, password });
+  register(username: string, fullName: string, email: string, password: string, role: string = 'user') {
+    return this.http.post<any>(`${this.baseUrl}/register`, { username, fullName, email, password, role });
   }
 
   getProfile() {
@@ -175,6 +175,19 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem('authToken');
+  }
+
+  getUserRole(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const payloadBase64 = token.split('.')[1];
+      const decodedJson = atob(payloadBase64);
+      const decoded = JSON.parse(decodedJson);
+      return decoded.role || null;
+    } catch (e) {
+      return null;
+    }
   }
 
   private hasToken(): boolean {

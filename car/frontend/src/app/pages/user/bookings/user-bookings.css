@@ -1,0 +1,91 @@
+/* Sleek personal bookings card styling */
+
+.user-bookings-container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.portal-title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #09090b;
+}
+
+.booking-card {
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 12px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.booking-card:hover {
+  border-color: #a1a1aa;
+}
+
+.booking-card.expanded {
+  border-color: #09090b;
+  box-shadow: 0 4px 12px rgba(9, 9, 11, 0.05);
+}
+
+.booking-card-header {
+  border-bottom: 1px solid #f4f4f5;
+  background-color: #fafafa;
+}
+
+.booking-id {
+  font-weight: 600;
+  color: #09090b;
+  font-size: 0.95rem;
+}
+
+.booking-date {
+  font-size: 0.8rem;
+  color: #71717a;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.detail-row .label {
+  color: #71717a;
+}
+
+.detail-row .value {
+  color: #09090b;
+}
+
+.collapsed-summary {
+  font-size: 0.85rem;
+  color: #71717a;
+}
+
+.expand-indicator i {
+  transition: transform 0.2s ease;
+}
+
+.booking-card.expanded .expand-indicator i {
+  transform: rotate(180deg);
+}
+
+.text-zinc-950 {
+  color: #09090b;
+}
+
+.btn-danger-custom {
+  background-color: transparent;
+  border: 1px solid #fca5a5;
+  color: #ef4444;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.btn-danger-custom:hover {
+  background-color: #ef4444;
+  border-color: #ef4444;
+  color: #ffffff;
+}

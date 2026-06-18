@@ -1,0 +1,318 @@
+<div class="user-dashboard-container py-4 px-4">
+  <div class="row mb-4 align-items-center">
+    <div class="col-md-6">
+      <h2 class="portal-title">Explore Our Fleet</h2>
+      <p class="text-muted">Choose your dream car, customize specs, and book instantly</p>
+    </div>
+    <div class="col-md-6 text-md-end">
+      <div class="promo-badge-container">
+        <span class="badge bg-zinc-900 text-white p-2 me-2">Code: FIRSTCAR (10% Off)</span>
+        <span class="badge bg-zinc-900 text-white p-2">Code: SAVEMORE (15% Off)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters Row -->
+  <div class="filter-card p-4 mb-4">
+    <div class="row g-3">
+      <div class="col-md-3">
+        <label class="form-label text-muted small uppercase">Brand / Model</label>
+        <input type="text" class="form-control" [(ngModel)]="brandFilter" (input)="applyFilters()" placeholder="e.g. BMW, Toyota">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted small uppercase">Color</label>
+        <input type="text" class="form-control" [(ngModel)]="colorFilter" (input)="applyFilters()" placeholder="e.g. Black, White">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted small uppercase">Max Daily Rate (₹)</label>
+        <input type="number" class="form-control" [(ngModel)]="rateFilter" (input)="applyFilters()" placeholder="e.g. 5000">
+      </div>
+      <div class="col-md-3 d-flex align-items-end gap-2">
+        <button class="btn btn-primary-custom w-100" (click)="applyFilters()">
+          <i class="fa fa-filter"></i> Apply
+        </button>
+        <button class="btn btn-secondary-custom w-100" (click)="resetFilters()">
+          Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fleet Grid -->
+  <div class="row g-4">
+    @for (car of filteredCars; track car.id || car.carId) {
+      <div class="col-xl-4 col-md-6">
+        <div class="car-rental-card">
+          <div class="car-card-img-wrapper">
+            <img [src]="car.carImage || 'https://via.placeholder.com/400x250?text=No+Image'" 
+                 [alt]="car.brand + ' ' + car.model" 
+                 (error)="onImageError($event)">
+            <span class="daily-price-badge">₹{{ car.dailyRate }}/day</span>
+          </div>
+          <div class="car-card-body p-4">
+            <h4 class="car-card-title">{{ car.brand }} {{ car.model }}</h4>
+            <div class="car-meta-details d-flex justify-content-between mb-4">
+              <span><i class="fa fa-calendar"></i> Year: <strong>{{ car.year }}</strong></span>
+              <span><i class="fa fa-paint-brush"></i> Color: <strong class="capitalize">{{ car.color }}</strong></span>
+            </div>
+            <button class="btn btn-primary-custom w-100 py-2" (click)="openBooking(car)">
+              Rent This Car
+            </button>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="col-12 text-center py-5">
+        <div class="empty-state-icon mb-3">
+          <i class="fa fa-car-crash text-muted" style="font-size: 3rem;"></i>
+        </div>
+        <h4 class="text-muted">No cars match your filter settings</h4>
+        <button class="btn btn-secondary-custom mt-2" (click)="resetFilters()">Clear Filters</button>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Dynamic checkout and Payment Modal -->
+@if (showBookingModal) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="checkout-modal p-0" (click)="$event.stopPropagation()">
+      
+      <!-- Modal Header -->
+      <div class="checkout-header p-4 d-flex justify-content-between align-items-center">
+        <div>
+          <h3 class="mb-0 text-white">Rent {{ selectedCar?.brand }} {{ selectedCar?.model }}</h3>
+          <span class="text-muted small">Step {{ bookingStep === 'details' ? '1 of 2: Details' : bookingStep === 'payment' ? '2 of 2: Payment' : 'Complete' }}</span>
+        </div>
+        <button class="close-btn text-white" (click)="closeModal()">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+
+      <!-- STEP 1: Details -->
+      @if (bookingStep === 'details') {
+        <form [formGroup]="bookingForm" (ngSubmit)="proceedToPayment()" class="checkout-body p-4">
+          <div class="row g-3">
+            
+            <div class="col-md-6">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-control" formControlName="customerName" placeholder="Your Name">
+              @if (isFieldInvalid(bookingForm, 'customerName')) {
+                <div class="text-danger small mt-1">Name is required (min 3 chars).</div>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">City</label>
+              <input type="text" class="form-control" formControlName="customerCity" placeholder="City">
+              @if (isFieldInvalid(bookingForm, 'customerCity')) {
+                <div class="text-danger small mt-1">City is required.</div>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Mobile Number</label>
+              <input type="text" class="form-control" formControlName="mobileNo" placeholder="10-digit number">
+              @if (isFieldInvalid(bookingForm, 'mobileNo')) {
+                <div class="text-danger small mt-1">Enter valid 10-digit mobile.</div>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-control" formControlName="email" placeholder="email@example.com">
+              @if (isFieldInvalid(bookingForm, 'email')) {
+                <div class="text-danger small mt-1">Enter valid email address.</div>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Pickup Date</label>
+              <input type="datetime-local" class="form-control" formControlName="bookingDate">
+              @if (isFieldInvalid(bookingForm, 'bookingDate')) {
+                <div class="text-danger small mt-1">Pickup date is required.</div>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Duration (Days)</label>
+              <input type="number" class="form-control" formControlName="duration" min="1">
+              @if (isFieldInvalid(bookingForm, 'duration')) {
+                <div class="text-danger small mt-1">Duration must be 1 day or more.</div>
+              }
+            </div>
+
+            <!-- Customizations & Specifications -->
+            <div class="col-12 mt-2">
+              <h5 class="custom-specs-title border-bottom pb-2">Custom Specifications</h5>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Choose Car Color Specification</label>
+              <select class="form-control capitalize" formControlName="customColor">
+                <option value="black">Obsidian Black</option>
+                <option value="white">Alpine White</option>
+                <option value="silver">Liquid Silver</option>
+                <option value="red">Cherry Red</option>
+                <option value="blue">Deep Ocean Blue</option>
+              </select>
+            </div>
+
+            <div class="col-md-6 d-flex align-items-center justify-content-start gap-4 pt-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="gpsCheck" formControlName="gps">
+                <label class="form-check-label" for="gpsCheck">
+                  Add GPS Navigation (+₹150/day)
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="insuranceCheck" formControlName="insurance">
+                <label class="form-check-label" for="insuranceCheck">
+                  Add Full Cover Insurance (+₹350/day)
+                </label>
+              </div>
+            </div>
+
+            <!-- Promo coupon code -->
+            <div class="col-md-6 mt-3">
+              <label class="form-label">Promo Coupon Code</label>
+              <input type="text" class="form-control uppercase" formControlName="promoCode" placeholder="e.g. FIRSTCAR">
+              @if (promoMessage) {
+                <div class="small mt-1" [ngClass]="appliedPromoCode ? 'text-success' : 'text-danger'">{{ promoMessage }}</div>
+              }
+            </div>
+
+            <!-- Price Breakdown Summary -->
+            <div class="col-md-6 mt-3">
+              <div class="bill-breakdown-card p-3">
+                <div class="d-flex justify-content-between text-muted small mb-1">
+                  <span>Base Fare ({{ bookingForm.get('duration')?.value }} day/s):</span>
+                  <span>₹{{ (selectedCar?.dailyRate * (bookingForm.get('duration')?.value || 1)) | number }}</span>
+                </div>
+                
+                @if (bookingForm.get('gps')?.value) {
+                  <div class="d-flex justify-content-between text-muted small mb-1">
+                    <span>GPS Addon:</span>
+                    <span>₹{{ (150 * (bookingForm.get('duration')?.value || 1)) | number }}</span>
+                  </div>
+                }
+
+                @if (bookingForm.get('insurance')?.value) {
+                  <div class="d-flex justify-content-between text-muted small mb-1">
+                    <span>Insurance Addon:</span>
+                    <span>₹{{ (350 * (bookingForm.get('duration')?.value || 1)) | number }}</span>
+                  </div>
+                }
+
+                @if (bookingForm.get('discount')?.value) {
+                  <div class="d-flex justify-content-between text-success small mb-1">
+                    <span>Discount:</span>
+                    <span>-₹{{ bookingForm.get('discount')?.value | number }}</span>
+                  </div>
+                }
+
+                <div class="d-flex justify-content-between fw-bold border-top pt-2 mt-2">
+                  <span>Total Bill Amount:</span>
+                  <span class="text-zinc-950">₹{{ bookingForm.get('totalBillAmount')?.value | number }}</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="checkout-footer d-flex justify-content-end gap-2 mt-4">
+            <button type="button" class="btn btn-secondary-custom" (click)="closeModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary-custom">
+              Proceed to Payment <i class="fa fa-arrow-right"></i>
+            </button>
+          </div>
+        </form>
+      }
+
+      <!-- STEP 2: Payment Gateway -->
+      @if (bookingStep === 'payment') {
+        <form [formGroup]="paymentForm" (ngSubmit)="processPayment()" class="checkout-body p-4">
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="payment-amount-alert p-3 mb-3 d-flex justify-content-between align-items-center">
+                <span>Amount to Pay Securely:</span>
+                <span class="fw-bold fs-5">₹{{ bookingForm.get('totalBillAmount')?.value | number }}</span>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Cardholder Name</label>
+              <input type="text" class="form-control" formControlName="cardName" placeholder="John Doe">
+              @if (isFieldInvalid(paymentForm, 'cardName')) {
+                <div class="text-danger small mt-1">Name is required (min 3 chars).</div>
+              }
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">16-Digit Card Number</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fa fa-credit-card"></i></span>
+                <input type="text" class="form-control" formControlName="cardNumber" placeholder="1234567812345678" maxlength="16">
+              </div>
+              @if (isFieldInvalid(paymentForm, 'cardNumber')) {
+                <div class="text-danger small mt-1">Please enter a valid 16-digit card number.</div>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Expiry Date (MM/YY)</label>
+              <input type="text" class="form-control" formControlName="cardExpiry" placeholder="MM/YY" maxlength="5">
+              @if (isFieldInvalid(paymentForm, 'cardExpiry')) {
+                <div class="text-danger small mt-1">Enter expiry (MM/YY).</div>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">CVV / CVC</label>
+              <input type="password" class="form-control" formControlName="cardCvv" placeholder="123" maxlength="3">
+              @if (isFieldInvalid(paymentForm, 'cardCvv')) {
+                <div class="text-danger small mt-1">Valid 3-digit CVV required.</div>
+              }
+            </div>
+
+            <div class="col-12 text-center text-muted small mt-4">
+              <i class="fa fa-lock text-success"></i> Payments are processed securely with SSL encryption.
+            </div>
+          </div>
+
+          <div class="checkout-footer d-flex justify-content-between gap-2 mt-4">
+            <button type="button" class="btn btn-secondary-custom" [disabled]="isSubmitting" (click)="backToDetails()">
+              <i class="fa fa-arrow-left"></i> Back to Details
+            </button>
+            <button type="submit" class="btn btn-primary-custom py-2" [disabled]="isSubmitting || paymentForm.invalid">
+              @if (isSubmitting) {
+                <span class="spinner-border spinner-border-sm me-2"></span> Simulating Secure Payment...
+              } @else {
+                <i class="fa fa-lock"></i> Authorize & Pay ₹{{ bookingForm.get('totalBillAmount')?.value | number }}
+              }
+            </button>
+          </div>
+        </form>
+      }
+
+      <!-- STEP 3: Booking Success -->
+      @if (bookingStep === 'success') {
+        <div class="checkout-body p-5 text-center">
+          <div class="success-animation-wrapper mb-4">
+            <div class="success-checkmark-circle">
+              <i class="fa fa-check"></i>
+            </div>
+          </div>
+          <h3 class="mb-3 text-white">Booking Confirmed!</h3>
+          <p class="text-muted px-4">{{ successMessage }}</p>
+          <div class="mt-4">
+            <button class="btn btn-primary-custom px-5 py-2" (click)="closeModal()">
+              Finish & Return
+            </button>
+          </div>
+        </div>
+      }
+
+    </div>
+  </div>
+}

@@ -53,7 +53,7 @@ export class AuthService {
         fullName,
         email,
         password: hashedPassword,
-        role: 'admin', // Default role
+        role: registerDto.role || 'admin',
       },
     });
 

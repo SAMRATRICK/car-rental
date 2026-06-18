@@ -295,7 +295,7 @@ export class Customer implements OnInit, AfterViewInit {
 
   getCustomerTotalSpent(customerId: number): number {
     const customerBookings = this.getCustomerBookings(customerId);
-    return customerBookings.reduce((total, booking) => total + (booking.totalBillAmount || 0), 0);
+    return customerBookings.reduce((total, booking) => total + Number(booking.totalBillAmount || 0), 0);
   }
 
   getCustomerLastBooking(customerId: number): string | null {

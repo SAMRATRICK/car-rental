@@ -1,4 +1,4 @@
-/* Sleek Shadcn-Inspired Admin Shell Layout */
+/* Sleek User Portal Layout */
 
 .dashboard-navbar {
   background-color: #09090b;
@@ -35,7 +35,6 @@
 .dashboard-navbar .nav-link:hover {
   color: #ffffff !important;
   background-color: #18181b;
-  transform: none;
 }
 
 .dashboard-navbar .nav-link.active {
@@ -55,8 +54,7 @@
   color: #ffffff;
 }
 
-/* User profile details in Header */
-.admin-profile {
+.user-profile {
   color: #fafafa;
   font-weight: 500;
   font-size: 0.9rem;
@@ -68,21 +66,10 @@
   gap: 8px;
 }
 
-.admin-profile:hover {
+.user-profile:hover {
   background-color: #18181b;
-  color: #ffffff;
-  transform: none;
 }
 
-.admin-profile img {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1.5px solid #27272a;
-  object-fit: cover;
-}
-
-/* Sleek logout button */
 .logout-btn {
   background-color: transparent;
   border: 1px solid #27272a;
@@ -98,8 +85,6 @@
   background-color: #ef4444;
   color: #ffffff;
   border-color: #ef4444;
-  transform: none;
-  box-shadow: none;
 }
 
 /* Modals and Overlays */
@@ -129,21 +114,15 @@
   border-radius: 12px;
   width: 90%;
   max-width: 480px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
   animation: slideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   color: #09090b;
   overflow: hidden;
 }
 
 @keyframes slideUp {
-  from { 
-    transform: translateY(15px);
-    opacity: 0;
-  }
-  to { 
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(15px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 .modal-header {
@@ -165,17 +144,12 @@
   gap: 8px;
 }
 
-.modal-header h4 i {
-  color: #3b82f6;
-}
-
 .close-btn {
   background: transparent;
   border: none;
   color: #71717a;
   font-size: 20px;
   cursor: pointer;
-  transition: all 0.2s ease;
   width: 28px;
   height: 28px;
   display: flex;
@@ -187,7 +161,6 @@
 .close-btn:hover {
   background-color: #f4f4f5;
   color: #09090b;
-  transform: none;
 }
 
 .modal-body {
@@ -196,7 +169,6 @@
   overflow-y: auto;
 }
 
-/* Profile Photo Section */
 .profile-pic-section {
   text-align: center;
   margin-bottom: 20px;
@@ -245,7 +217,6 @@
 
 .upload-overlay span {
   font-size: 10px;
-  font-weight: 500;
 }
 
 .form-group {
@@ -260,11 +231,6 @@
   font-size: 0.85rem;
 }
 
-.form-group label i {
-  margin-right: 4px;
-  color: #71717a;
-}
-
 .form-group .form-control {
   width: 100%;
   padding: 8px 12px;
@@ -273,19 +239,11 @@
   border-radius: 6px;
   color: #09090b;
   font-size: 0.9rem;
-  transition: all 0.15s ease;
-}
-
-.form-group .form-control:focus {
-  outline: none;
-  border-color: #a1a1aa;
-  box-shadow: 0 0 0 2px rgba(24, 24, 27, 0.05);
 }
 
 .form-group .form-control:disabled {
   background: #f4f4f5;
   cursor: not-allowed;
-  opacity: 0.8;
   color: #71717a;
 }
 
@@ -303,8 +261,6 @@
   border-radius: 6px;
   font-size: 0.875rem;
   font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
 }
 
 .modal-footer .btn-secondary {
@@ -313,20 +269,10 @@
   color: #27272a;
 }
 
-.modal-footer .btn-secondary:hover {
-  background: #f4f4f5;
-}
-
 .modal-footer .btn-primary {
   background: #18181b;
   color: #ffffff;
   border: 1px solid transparent;
-}
-
-.modal-footer .btn-primary:hover {
-  background: #27272a;
-  transform: none;
-  box-shadow: none;
 }
 
 .alert {
@@ -355,11 +301,6 @@
   .navbar-collapse {
     margin-top: 10px;
   }
-  
-  .navbar-nav {
-    margin-bottom: 10px;
-  }
-  
   .d-flex.align-items-center {
     flex-direction: column;
     align-items: flex-start !important;
@@ -367,9 +308,7 @@
     padding-top: 10px;
     border-top: 1px solid #27272a;
   }
-
   .logout-btn {
     width: 100%;
-    margin-top: 4px;
   }
 }

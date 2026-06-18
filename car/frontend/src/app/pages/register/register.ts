@@ -16,7 +16,8 @@ export class Register {
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: 'user'
   };
   
   router = inject(Router);
@@ -38,7 +39,8 @@ export class Register {
       this.registerObj.username,
       this.registerObj.fullName,
       this.registerObj.email, 
-      this.registerObj.password
+      this.registerObj.password,
+      this.registerObj.role
     ).subscribe({
       next: (response) => {
         if (response.result) {

@@ -1,8 +1,8 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
   <div class="container">
-    <a class="navbar-brand" href="#">
-      <i class="bi bi-car-front-fill"></i> CarRental
+    <a class="navbar-brand" (click)="scrollToSection('home')">
+      <i class="bi bi-car-front-fill text-primary"></i> CarRental
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
@@ -13,24 +13,24 @@
           <a class="nav-link" (click)="scrollToSection('home')">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" (click)="scrollToSection('features')">Features</a>
+          <a class="nav-link" (click)="scrollToSection('features')">Why Us</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" (click)="scrollToSection('cars')">Cars</a>
+          <a class="nav-link" (click)="scrollToSection('cars')">Fleet</a>
         </li>
         @if (!isLoggedIn()) {
           <li class="nav-item">
-            <button class="btn btn-outline-light ms-2" (click)="goToLogin()">Login</button>
+            <button class="btn btn-outline-light ms-2 px-4" (click)="goToLogin()">Login</button>
           </li>
           <li class="nav-item">
-            <button class="btn btn-primary ms-2" (click)="goToRegister()">Sign Up</button>
+            <button class="btn btn-brand ms-2 px-4" (click)="goToRegister()">Sign Up</button>
           </li>
         } @else {
           <li class="nav-item">
-            <button class="btn btn-success ms-2" (click)="goToDashboard()">Dashboard</button>
+            <button class="btn btn-brand ms-2 px-4" (click)="goToDashboard()">Dashboard</button>
           </li>
           <li class="nav-item">
-            <button class="btn btn-outline-light ms-2" (click)="logout()">Logout</button>
+            <button class="btn btn-outline-light ms-2 px-4" (click)="logout()">Logout</button>
           </li>
         }
       </ul>
@@ -42,46 +42,43 @@
 <section id="home" class="hero-section">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <div class="row align-items-center">
+    <div class="row align-items-center g-5">
       <div class="col-lg-6">
         <h1 class="hero-title animate-fade-in">
-          Your Journey Starts Here
+          Premium Car Rentals, Made Simple.
         </h1>
         <p class="hero-subtitle animate-fade-in-delay">
-          Rent premium cars at affordable prices. Experience luxury, comfort, and reliability with every ride.
+          Rent luxury and daily commuter cars at competitive prices. Experience round-the-clock reliability, comfort, and simple booking procedures.
         </p>
         <div class="hero-buttons animate-fade-in-delay-2">
-          <button class="btn btn-primary btn-lg me-3" (click)="goToLogin()">
-            <i class="bi bi-car-front"></i> Book Now
+          <button class="btn btn-brand btn-lg me-3 px-4 py-3" (click)="scrollToSection('cars')">
+            <i class="bi bi-car-front"></i> Browse Fleet
           </button>
-          <button class="btn btn-outline-light btn-lg" (click)="scrollToSection('cars')">
-            <i class="bi bi-search"></i> Browse Cars
+          <button class="btn btn-outline-light btn-lg px-4 py-3" (click)="scrollToSection('features')">
+            Learn More
           </button>
         </div>
         <div class="hero-stats animate-fade-in-delay-3">
           <div class="stat-item">
-            <h3>500+</h3>
-            <p>Happy Customers</p>
+            <h3>1.2K+</h3>
+            <p>Rides Completed</p>
           </div>
           <div class="stat-item">
-            <h3>50+</h3>
-            <p>Premium Cars</p>
+            <h3>98%</h3>
+            <p>Satisfaction</p>
           </div>
           <div class="stat-item">
             <h3>24/7</h3>
-            <p>Support</p>
+            <p>Active Support</p>
           </div>
         </div>
       </div>
       <div class="col-lg-6">
         <div class="hero-image animate-slide-in">
-          <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600" alt="Luxury Car" class="img-fluid">
+          <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&q=80" alt="Premium luxury car" class="img-fluid hero-car-img" (error)="onImageError($event)">
         </div>
       </div>
     </div>
-  </div>
-  <div class="scroll-indicator">
-    <i class="bi bi-chevron-down"></i>
   </div>
 </section>
 
@@ -90,7 +87,7 @@
   <div class="container">
     <div class="section-header text-center">
       <h2 class="section-title">Why Choose Us</h2>
-      <p class="section-subtitle">Experience the best car rental service with unmatched benefits</p>
+      <p class="section-subtitle">Experience premium car rental service with unmatched benefits</p>
     </div>
     <div class="row g-4">
       @for (feature of features; track feature.title) {
@@ -112,19 +109,34 @@
 <section id="cars" class="cars-section">
   <div class="container">
     <div class="section-header text-center">
-      <h2 class="section-title">Our Fleet</h2>
-      <p class="section-subtitle">Explore our premium collection of vehicles</p>
+      <h2 class="section-title">Our Premium Fleet</h2>
+      <p class="section-subtitle">Select your choice of ride and experience the road in style</p>
     </div>
+    
     <div class="row g-4">
-      @for (car of cars; track car.name) {
+      @for (car of carsList; track car.carId || car.regNo || car.id) {
         <div class="col-lg-4 col-md-6">
           <div class="car-card">
-            <div class="car-image">
-              <img [src]="car.image" [alt]="car.name">
-              <div class="car-badge">{{car.type}}</div>
+            <div class="car-image-container">
+              <img [src]="car.carImage || car.image || 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400'" [alt]="car.brand" class="car-img" (error)="onImageError($event)">
+              <div class="car-type-badge">{{ car.color || 'Premium' }}</div>
             </div>
-            <div class="car-details">
-              <h4>{{car.name}}</h4>
+            <div class="car-info">
+              <div class="car-meta">
+                <span class="car-year">{{ car.year }}</span>
+                <span class="car-reg">{{ car.regNo || 'COMMERCIAL' }}</span>
+              </div>
+              <h4 class="car-name">{{ car.brand }} {{ car.model }}</h4>
+              <hr class="car-divider">
+              <div class="car-footer">
+                <div class="car-rate">
+                  <span class="rate-amount">₹{{ car.dailyRate | number }}</span>
+                  <span class="rate-period">/ day</span>
+                </div>
+                <button class="btn btn-brand btn-sm px-3" (click)="openBooking(car)">
+                  <i class="bi bi-lightning-fill"></i> Rent Now
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -136,10 +148,10 @@
 <!-- CTA Section -->
 <section class="cta-section">
   <div class="container text-center">
-    <h2 class="cta-title">Ready to Hit the Road?</h2>
-    <p class="cta-subtitle">Join thousands of satisfied customers and book your perfect ride today</p>
-    <button class="btn btn-light btn-lg" (click)="goToLogin()">
-      <i class="bi bi-arrow-right-circle"></i> Get Started Now
+    <h2 class="cta-title">Ready to Start Your Journey?</h2>
+    <p class="cta-subtitle">Apply coupon <strong>FIRSTCAR</strong> for 10% off on your first rental booking!</p>
+    <button class="btn btn-light btn-lg px-4 py-3" (click)="scrollToSection('cars')">
+      <i class="bi bi-arrow-right-circle-fill text-primary"></i> Rent a Car Now
     </button>
   </div>
 </section>
@@ -147,33 +159,180 @@
 <!-- Footer -->
 <footer class="footer">
   <div class="container">
-    <div class="row">
-      <div class="col-lg-4">
-        <h5><i class="bi bi-car-front-fill"></i> CarRental</h5>
-        <p>Your trusted partner for premium car rentals. Experience luxury and comfort on every journey.</p>
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <h5><i class="bi bi-car-front-fill text-primary"></i> CarRental</h5>
+        <p class="text-muted mt-3 pe-lg-4">Your trusted platform for premium car rentals. Fast bookings, reliable vehicles, and dedicated customer support at your fingertips.</p>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-3">
         <h5>Quick Links</h5>
-        <ul class="footer-links">
+        <ul class="footer-links mt-3">
           <li><a (click)="scrollToSection('home')">Home</a></li>
-          <li><a (click)="scrollToSection('features')">Features</a></li>
-          <li><a (click)="scrollToSection('cars')">Cars</a></li>
-          <li><a (click)="goToLogin()">Login</a></li>
+          <li><a (click)="scrollToSection('features')">Why Us</a></li>
+          <li><a (click)="scrollToSection('cars')">Fleet</a></li>
+          <li><a (click)="goToLogin()">Admin Portal</a></li>
         </ul>
       </div>
       <div class="col-lg-4">
-        <h5>Follow Us</h5>
-        <div class="social-links">
+        <h5>Connect With Us</h5>
+        <p class="text-muted mt-3">Follow us on social media for seasonal promo codes and updates.</p>
+        <div class="social-links mt-3">
           <a href="#"><i class="bi bi-facebook"></i></a>
-          <a href="#"><i class="bi bi-twitter"></i></a>
+          <a href="#"><i class="bi bi-twitter-x"></i></a>
           <a href="#"><i class="bi bi-instagram"></i></a>
           <a href="#"><i class="bi bi-linkedin"></i></a>
         </div>
       </div>
     </div>
-    <hr>
-    <div class="text-center">
-      <p class="mb-0">© 2026 Car Rental System | Samrat Chatterjee. All rights reserved.</p>
+    <hr class="mt-5 border-secondary">
+    <div class="text-center mt-4 text-muted">
+      <p class="mb-0">© 2026 Car Rental System. Designed with premium aesthetics. All rights reserved.</p>
     </div>
   </div>
 </footer>
+
+<!-- Public Renting Booking Modal -->
+@if (showBookingModal && selectedCar) {
+  <div class="modal-overlay-custom" (click)="closeBookingModal()">
+    <div class="booking-modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header-custom">
+        <div>
+          <span class="modal-subtitle">RENTAL RESERVATION</span>
+          <h3 class="modal-title">{{ selectedCar.brand }} {{ selectedCar.model }}</h3>
+        </div>
+        <button class="modal-close-btn" (click)="closeBookingModal()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div class="modal-body-custom">
+        @if (bookingSuccess) {
+          <div class="success-screen text-center py-4">
+            <div class="success-icon-container">
+              <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <h4 class="mt-3 font-weight-bold">Booking Confirmed!</h4>
+            <p class="text-muted px-3">{{ successMessage }}</p>
+            <div class="alert alert-info d-flex align-items-center gap-2 mt-4 mx-3">
+              <i class="bi bi-info-circle"></i>
+              <span>Keep note of your Booking ID for pickup.</span>
+            </div>
+            <button class="btn btn-brand mt-4 px-5" (click)="closeBookingModal()">Done</button>
+          </div>
+        } @else {
+          <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
+            <div class="row g-3">
+              <!-- Customer Info -->
+              <div class="col-12">
+                <div class="form-section-title">
+                  <i class="bi bi-person-fill"></i> Personal Information
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label-custom">Full Name *</label>
+                <input type="text" formControlName="customerName" class="form-control" placeholder="Enter full name"
+                       [class.is-invalid]="isFieldInvalid('customerName')">
+                <div class="invalid-feedback">Full name is required (min 3 chars).</div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label-custom">Email *</label>
+                <input type="email" formControlName="email" class="form-control" placeholder="user@example.com"
+                       [class.is-invalid]="isFieldInvalid('email')">
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label-custom">Mobile Number *</label>
+                <input type="tel" formControlName="mobileNo" class="form-control" placeholder="10-digit number" maxlength="10"
+                       [class.is-invalid]="isFieldInvalid('mobileNo')">
+                <div class="invalid-feedback">Must be a valid 10-digit number.</div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label-custom">City *</label>
+                <input type="text" formControlName="customerCity" class="form-control" placeholder="Enter city"
+                       [class.is-invalid]="isFieldInvalid('customerCity')">
+                <div class="invalid-feedback">City is required.</div>
+              </div>
+
+              <!-- Rental Info -->
+              <div class="col-12 mt-4">
+                <div class="form-section-title">
+                  <i class="bi bi-calendar-event-fill"></i> Rental & Pickup Details
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label-custom">Pickup Date & Time *</label>
+                <input type="datetime-local" formControlName="bookingDate" class="form-control"
+                       [class.is-invalid]="isFieldInvalid('bookingDate')">
+                <div class="invalid-feedback">Pickup date is required.</div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label-custom">Duration (Days) *</label>
+                <input type="number" formControlName="duration" class="form-control" min="1"
+                       [class.is-invalid]="isFieldInvalid('duration')">
+                <div class="invalid-feedback">Duration must be 1 day or more.</div>
+              </div>
+
+              <!-- Coupon Code -->
+              <div class="col-12 mt-2">
+                <label class="form-label-custom">Promo Coupon Code</label>
+                <div class="input-group">
+                  <input type="text" formControlName="promoCode" class="form-control" placeholder="e.g. FIRSTCAR">
+                </div>
+                @if (promoMessage) {
+                  <div class="promo-feedback mt-1" [class.text-success]="appliedPromoCode" [class.text-danger]="!appliedPromoCode">
+                    {{ promoMessage }}
+                  </div>
+                }
+              </div>
+
+              <!-- Price breakdown card -->
+              <div class="col-12 mt-4">
+                <div class="price-breakdown-card">
+                  <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Daily Rate</span>
+                    <span class="font-weight-bold">₹{{ selectedCar.dailyRate | number }}</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Rental Days</span>
+                    <span class="font-weight-bold">{{ bookingForm.value.duration || 1 }} days</span>
+                  </div>
+                  @if (bookingForm.value.discount && bookingForm.value.discount > 0) {
+                    <div class="d-flex justify-content-between text-success mb-2">
+                      <span>Discount Coupon</span>
+                      <span>-₹{{ bookingForm.value.discount | number }}</span>
+                    </div>
+                  }
+                  <hr class="my-2 border-secondary">
+                  <div class="d-flex justify-content-between align-items-center mt-2">
+                    <span class="total-label">Total Bill Amount</span>
+                    <span class="total-price">₹{{ bookingForm.value.totalBillAmount | number }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer-custom mt-4">
+              <button type="button" class="btn btn-secondary-custom px-4" (click)="closeBookingModal()">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-brand px-5" [disabled]="isSubmitting">
+                @if (isSubmitting) {
+                  <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Confirming...
+                } @else {
+                  <i class="bi bi-check2-circle"></i> Confirm Booking
+                }
+              </button>
+            </div>
+          </form>
+        }
+      </div>
+    </div>
+  </div>
+}

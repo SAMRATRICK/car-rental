@@ -28,6 +28,7 @@ export class Booking implements OnInit {
     email: new FormControl("", [Validators.required, Validators.email]),
     carId: new FormControl("", [Validators.required]),
     bookingDate: new FormControl("", [Validators.required]),
+    duration: new FormControl(1, [Validators.required, Validators.min(1)]),
     discount: new FormControl(0),
     totalBillAmount: new FormControl("", [Validators.required, Validators.min(1)]),
   });
@@ -35,6 +36,28 @@ export class Booking implements OnInit {
   ngOnInit(): void {
     this.getCarList();
     this.getBookings();
+    this.setupAutoCalculation();
+  }
+
+  setupAutoCalculation() {
+    this.bookingForm.get('carId')?.valueChanges.subscribe(() => this.calculateTotalAmount());
+    this.bookingForm.get('duration')?.valueChanges.subscribe(() => this.calculateTotalAmount());
+    this.bookingForm.get('discount')?.valueChanges.subscribe(() => this.calculateTotalAmount());
+  }
+
+  calculateTotalAmount() {
+    const carId = this.bookingForm.get('carId')?.value;
+    const duration = Number(this.bookingForm.get('duration')?.value || 1);
+    const discount = Number(this.bookingForm.get('discount')?.value || 0);
+
+    if (carId) {
+      const selectedCar = this.carList.find(c => Number(c.carId) === Number(carId));
+      if (selectedCar && selectedCar.dailyRate) {
+        const rate = Number(selectedCar.dailyRate);
+        const total = (rate * duration) - discount;
+        this.bookingForm.get('totalBillAmount')?.setValue(total > 0 ? total : 0, { emitEvent: false });
+      }
+    }
   }
 
   openModal() {
@@ -251,6 +274,16 @@ export class Booking implements OnInit {
       const date = new Date(formattedDate);
       formattedDate = date.toISOString().slice(0, 16);
     }
+
+    let duration = 1;
+    if (booking.carId) {
+      const selectedCar = this.carList.find(c => c.carId === booking.carId);
+      if (selectedCar && selectedCar.dailyRate && Number(selectedCar.dailyRate) > 0) {
+        const rate = Number(selectedCar.dailyRate);
+        const amount = Number(booking.totalBillAmount) + Number(booking.discount || 0);
+        duration = Math.max(1, Math.round(amount / rate));
+      }
+    }
     
     this.bookingForm.patchValue({
       bookingId: booking.bookingId,
@@ -260,6 +293,7 @@ export class Booking implements OnInit {
       email: booking.email,
       carId: booking.carId,
       bookingDate: formattedDate,
+      duration: duration,
       discount: booking.discount || 0,
       totalBillAmount: booking.totalBillAmount
     });
@@ -276,6 +310,7 @@ export class Booking implements OnInit {
     this.bookingForm.reset();
     this.bookingForm.patchValue({
       bookingId: 0,
+      duration: 1,
       discount: 0
     });
   }
